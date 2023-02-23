@@ -7,7 +7,7 @@ const googleUtil = require("./google-utils-files/google-utils");
 const { google } = require("googleapis");
 const { setCookie } = require("./middleware/cookiesdata");
 app.get("/", function (req, res) {
-  res.send("Hello World");
+  res.send("Hello google calender app hit to /rest/v1/calendar/init/  ");
 });
 app.get(
   "/rest/v1/calendar/init/",(req, res) => {
