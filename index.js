@@ -1,11 +1,11 @@
 const express = require("express");
 const app = express();
 
-const passport = require("./passport-util");
-const googleCalenderService = require("./google-calendar.service");
-const googleUtil = require("./google-utils");
+const passport = require("./google-utils-files/passport-util");
+const googleCalenderService = require("./google-utils-files/google-calendar.service");
+const googleUtil = require("./google-utils-files/google-utils");
 const { google } = require("googleapis");
-const { setCookie } = require("./cookiesdata");
+const { setCookie } = require("./middleware/cookiesdata");
 app.get("/", function (req, res) {
   res.send("Hello World");
 });

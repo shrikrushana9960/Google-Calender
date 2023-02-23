@@ -1,4 +1,4 @@
-const googleUtil = require("./google-utils");
+const googleUtil = require("../google-utils-files/google-utils");
 const setCookie = async (req, res, next) => {
   req.session = {};
   googleUtil.getGoogleAccountFromCode(req.query.code, (err, res) => {
