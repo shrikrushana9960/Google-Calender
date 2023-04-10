@@ -1,14 +1,13 @@
 const { google } = require('googleapis');
 
 module.exports.listEvents = function (auth, cb) {
-    const calendar = google.calendar({version: 'v3', auth});
-    console.log(calendar.events)
-    calendar.events.list({
-      calendarId: 'primary',
-      timeMin: (new Date()).toISOString(),
-      maxResults: 10,
-      singleEvents: true,
-      orderBy: 'startTime',
+    const youtube = google.youtube({version: 'v3', auth});
+  
+    youtube.subscriptions.list({
+      mine: true,
+      part: 'snippet',
+      order: 'alphabetical',
+      maxResults: 50
     }, (err, res) => {
       if (err) return console.log('The API returned an error: ' + err);
       const events = res.data.items;
