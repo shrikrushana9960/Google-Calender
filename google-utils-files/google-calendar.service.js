@@ -9,7 +9,7 @@ module.exports.listEvents = function (auth, cb) {
       order: 'alphabetical',
       maxResults: 1000
     }, (err, res) => {
-      if (err) return console.log('The API returned an error: ' + err);
+      if (err) return cb({error:'The API returned an error: ' + err});
       const events = res.data.items;
       if (events.length) {
         cb(events)

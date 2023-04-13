@@ -5,25 +5,22 @@ const {
 const User = require("../models/user");
 const { google } = require("googleapis");
 const { getToken } = require("./getTokens");
-
+const urlmodel = require("../models/url");
+const { v4: uuidv4 } = require("uuid");
+const { getChannelInfo } = require("./getChannel");
 require("dotenv").config();
-
-// google app config
 
 const register = async (req, res) => {
   try {
     console.log(req.query.code);
     if (req.query.code && req.query.code !== "undefined") {
-      // getGoogleAccountFromCode(req.query.code, async(err, data) => {
-      //   if (err) {
-      //  console.log(err)
-      //   } else {
-      //
-      //     res.status(200).json({ success: true, data: user });
-      //   }})
       const tokens = await getToken(req.query.code);
-      const user = await User.create({ ...tokens });
-      res.status(200).json({ user });
+      if (tokens.access_token) {
+        const user = await User.create({ ...tokens });
+        res.status(200).json({ user });
+      } else {
+        res.status(200).json({ success: false, message: "token error" });
+      }
     } else {
       res
         .status(200)
@@ -89,5 +86,39 @@ const update = async (req, res) => {
   }
 };
 
+const addURL = async (req, res) => {
+  const uuid = uuidv4();
+  const channel = await getChannelInfo(req.body.channel_id);
+  try {
+    const url = await urlmodel.create({ ...req.body, uuid, ...channel });
+    if (url) res.status(200).json({ success: true, data: uuid, channel });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
 
-module.exports = { register, login, update, getAllUsers, getSingleUser };
+const getChannel = async (req, res) => {
+  const channel = await getChannelInfo(req.query.channel_id);
+  res.status(200).json({ success: true, channel });
+};
+const getURL = async (req, res) => {
+  try {
+    const url = await urlmodel.find({ ...req.query });
+    if (url) res.status(200).json({ success: true, data: url[0] });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+module.exports = {
+  register,
+  getChannel,
+  login,
+  update,
+  getAllUsers,
+  getSingleUser,
+  addURL,
+  getURL,
+};
