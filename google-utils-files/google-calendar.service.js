@@ -7,7 +7,7 @@ module.exports.listEvents = function (auth, cb) {
       mine: true,
       part: 'snippet',
       order: 'alphabetical',
-      maxResults: 50
+      maxResults: 1000
     }, (err, res) => {
       if (err) return console.log('The API returned an error: ' + err);
       const events = res.data.items;
